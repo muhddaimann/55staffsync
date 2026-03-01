@@ -1,117 +1,159 @@
-import React from 'react';
-import { StyleSheet, View, Pressable } from 'react-native';
-import { Surface, MD3LightTheme } from 'react-native-paper';
-import { router, usePathname } from 'expo-router';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useEffect, useRef } from 'react';
+import { TouchableOpacity, Animated } from 'react-native';
+import { Surface, Text, IconButton, useTheme } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { usePathname, router } from 'expo-router';
+import { useDesign } from '../contexts/designContext';
 
 export function NavBar() {
+  const theme = useTheme();
+  const insets = useSafeAreaInsets();
+  const tokens = useDesign();
   const pathname = usePathname();
 
-  // Map pathnames to active state
   const isHome = pathname === '/';
   const isSettings = pathname === '/settings';
 
-  // Conditional middle icon and action
-  const middleIcon = isHome ? "plus" : "logout";
-  const middleAction = () => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(20)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
+  const handleActionButton = () => {
     if (isHome) {
-      console.log('Plus Pressed - Add Item Logic');
+      console.log('Plus pressed');
     } else {
-      console.log('Logout Pressed - Sign Out Logic');
-      // Add auth.signOut() here
+      console.log('Logout pressed');
     }
   };
 
-  const NavItem = ({ icon, isActive, onPress, isCenter = false }: any) => (
-    <Pressable onPress={onPress} style={[styles.navItem, isCenter && styles.centerItem]}>
-      <Surface 
-        style={[
-          styles.iconContainer, 
-          isActive && styles.activeIconContainer,
-          isCenter && styles.centerIconContainer
-        ]} 
-        elevation={isCenter ? 4 : 0}
-      >
-        <MaterialCommunityIcons 
-          name={icon} 
-          size={isCenter ? 32 : 26} 
-          color={isCenter ? 'white' : (isActive ? MD3LightTheme.colors.primary : '#757575')} 
-        />
-      </Surface>
-    </Pressable>
-  );
+  const navItems = [
+    {
+      key: 'home',
+      label: 'Home',
+      icon: 'home-variant',
+      active: isHome,
+      onPress: () => router.replace('/'),
+    },
+    {
+      key: 'settings',
+      label: 'Settings',
+      icon: 'cog-outline',
+      active: isSettings,
+      onPress: () => router.replace('/settings'),
+    },
+  ];
 
   return (
-    <View style={styles.wrapper} pointerEvents="box-none">
-      <Surface style={styles.container} elevation={5}>
-        <NavItem 
-          icon="home" 
-          isActive={isHome} 
-          onPress={() => router.push('/')} 
-        />
-        
-        <NavItem 
-          icon={middleIcon} 
-          isCenter 
-          onPress={middleAction} 
-        />
-
-        <NavItem 
-          icon="cog" 
-          isActive={isSettings} 
-          onPress={() => router.push('/settings')} 
-        />
+    <Animated.View
+      style={{
+        position: 'absolute',
+        bottom:
+          (insets.bottom > 0 ? insets.bottom : tokens.spacing.md) +
+          tokens.spacing.md,
+        left: tokens.spacing.lg,
+        right: tokens.spacing.lg,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: tokens.spacing.md,
+        opacity: fadeAnim,
+        transform: [{ translateY: slideAnim }],
+      }}
+    >
+      <Surface
+        elevation={4}
+        style={{
+          flexDirection: 'row',
+          backgroundColor: theme.colors.surface,
+          borderRadius: 999,
+          height: 64,
+          flex: 1,
+          alignItems: 'center',
+          paddingHorizontal: tokens.spacing.xs,
+          borderWidth: 1,
+          borderColor: theme.colors.outlineVariant,
+        }}
+      >
+        {navItems.map((item) => (
+          <TouchableOpacity
+            key={item.key}
+            onPress={item.onPress}
+            activeOpacity={0.8}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+            }}
+          >
+            <IconButton
+              icon={item.icon}
+              size={item.active ? 26 : 22}
+              iconColor={
+                item.active
+                  ? theme.colors.primary
+                  : theme.colors.onSurfaceVariant
+              }
+              style={{ margin: 0 }}
+            />
+            <Text
+              variant="labelSmall"
+              style={{
+                marginTop: -4,
+                color: item.active
+                  ? theme.colors.primary
+                  : theme.colors.onSurfaceVariant,
+              }}
+            >
+              {item.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </Surface>
-    </View>
+
+      <TouchableOpacity onPress={handleActionButton} activeOpacity={0.85}>
+        <Surface
+          elevation={4}
+          style={{
+            height: 64,
+            width: 64,
+            borderRadius: 999,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: isHome
+              ? theme.colors.primary
+              : theme.colors.error,
+            borderWidth: 1,
+            borderColor: isHome
+              ? theme.colors.primary
+              : theme.colors.error,
+          }}
+        >
+          <IconButton
+            icon={isHome ? 'plus' : 'logout'}
+            size={28}
+            iconColor={
+              isHome
+                ? theme.colors.onPrimary
+                : theme.colors.onError
+            }
+            style={{ margin: 0 }}
+          />
+        </Surface>
+      </TouchableOpacity>
+    </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 120,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    zIndex: 1000,
-  },
-  container: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    width: '85%',
-    height: 70,
-    borderRadius: 35,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    paddingHorizontal: 10,
-    marginBottom: 30, // Floating height from bottom
-  },
-  navItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-  },
-  iconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-  activeIconContainer: {
-    backgroundColor: '#f0f4ff',
-  },
-  centerItem: {
-    marginTop: -40, // Raise the center button
-  },
-  centerIconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: MD3LightTheme.colors.primary,
-  }
-});

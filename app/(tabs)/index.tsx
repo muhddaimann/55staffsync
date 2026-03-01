@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { 
   Button, 
   Card, 
   Text, 
   Avatar, 
-  IconButton, 
   List, 
-  MD3Colors, 
   Portal,
   Modal,
   TextInput,
   Chip
 } from 'react-native-paper';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
+import { useDesign } from '../../contexts/designContext';
 
 const LeftContent = props => <Avatar.Icon {...props} icon="folder" />;
 
@@ -21,17 +20,18 @@ export default function Home() {
   const [visible, setVisible] = useState(false);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
+  const tokens = useDesign();
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+    <View style={{ flex: 1, backgroundColor: tokens.colors.background }}>
+      <ScrollView contentContainerStyle={{ padding: tokens.spacing.md, paddingBottom: 110 }}>
         
         {/* Banner Section */}
-        <Text variant="headlineMedium" style={styles.header}>Paper Demo</Text>
-        <Text variant="bodyLarge" style={styles.subtitle}>Showcasing Material Design components.</Text>
+        <Text variant="headlineMedium" style={{ marginTop: tokens.spacing.lg, fontWeight: 'bold' }}>Paper Demo</Text>
+        <Text variant="bodyLarge" style={{ marginBottom: tokens.spacing.lg, opacity: 0.7 }}>Showcasing Material Design components.</Text>
 
         {/* Card Component */}
-        <Card style={styles.card}>
+        <Card style={{ marginBottom: tokens.spacing.md }}>
           <Card.Title title="Card Example" subtitle="Standard Material Card" left={LeftContent} />
           <Card.Content>
             <Text variant="bodyMedium">This card is built using react-native-paper. It supports elevation, themes, and more.</Text>
@@ -43,17 +43,17 @@ export default function Home() {
         </Card>
 
         {/* Input & Chips */}
-        <View style={styles.section}>
+        <View style={{ marginVertical: tokens.spacing.sm }}>
           <TextInput
             label="Example Input"
             mode="outlined"
             placeholder="Type something..."
-            style={styles.input}
+            style={{ marginBottom: tokens.spacing.sm }}
           />
-          <View style={styles.chipRow}>
-            <Chip icon="information" style={styles.chip} onPress={() => {}}>Info</Chip>
-            <Chip icon="heart" style={styles.chip} onPress={() => {}}>Favorite</Chip>
-            <Chip selected style={styles.chip}>Selected</Chip>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: tokens.spacing.sm }}>
+            <Chip icon="information" style={{ marginBottom: tokens.spacing.xs }} onPress={() => {}}>Info</Chip>
+            <Chip icon="heart" style={{ marginBottom: tokens.spacing.xs }} onPress={() => {}}>Favorite</Chip>
+            <Chip selected style={{ marginBottom: tokens.spacing.xs }}>Selected</Chip>
           </View>
         </View>
 
@@ -63,33 +63,33 @@ export default function Home() {
           <List.Item
             title="Open Info Modal"
             description="Uses React Native Paper Portal & Modal"
-            left={props => <List.Icon {...props} icon="information-outline" color={MD3Colors.primary50} />}
+            left={props => <List.Icon {...props} icon="information-outline" color={tokens.colors.primary} />}
             right={props => <List.Icon {...props} icon="chevron-right" />}
             onPress={showModal}
           />
           <List.Item
             title="Switch Tab"
             description="Go to the settings tab below"
-            left={props => <List.Icon {...props} icon="tab" color={MD3Colors.error50} />}
+            left={props => <List.Icon {...props} icon="tab" color={tokens.colors.error} />}
             onPress={() => router.push('/settings')}
           />
         </List.Section>
 
         {/* Buttons Section */}
-        <View style={styles.section}>
-          <Button icon="camera" mode="contained" onPress={showModal} style={styles.button}>
+        <View style={{ marginVertical: tokens.spacing.sm }}>
+          <Button icon="camera" mode="contained" onPress={showModal} style={{ marginVertical: 5 }}>
             Open Demo Modal
           </Button>
-          <Button icon="navigation" mode="elevated" onPress={() => {}} style={styles.button}>
+          <Button icon="navigation" mode="elevated" onPress={() => {}} style={{ marginVertical: 5 }}>
             Elevated Button
           </Button>
         </View>
 
         {/* Portal & Modal */}
         <Portal>
-          <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.modalContent}>
+          <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={{ backgroundColor: 'white', padding: tokens.spacing.lg, margin: tokens.spacing.lg, borderRadius: tokens.borderRadius.md }}>
             <Text variant="headlineSmall">Native Paper Modal</Text>
-            <Text variant="bodyMedium" style={{ marginVertical: 10 }}>
+            <Text variant="bodyMedium" style={{ marginVertical: tokens.spacing.sm }}>
               This modal uses the Paper Portal system to render above everything else.
             </Text>
             <Button mode="contained" onPress={hideModal}>Close</Button>
@@ -100,54 +100,3 @@ export default function Home() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  scrollContent: {
-    padding: 16,
-    paddingBottom: 110, // Extra space for FloatingNavBar
-  },
-  header: {
-    marginTop: 20,
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    marginBottom: 20,
-    opacity: 0.7,
-  },
-  card: {
-    marginBottom: 16,
-  },
-  section: {
-    marginVertical: 10,
-  },
-  input: {
-    marginBottom: 10,
-  },
-  chipRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  chip: {
-    marginBottom: 4,
-  },
-  button: {
-    marginVertical: 5,
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    margin: 20,
-    borderRadius: 8,
-  },
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
-});

@@ -1,18 +1,20 @@
-import { StyleSheet, View } from 'react-native';
-import { Text, List, Switch, MD3Colors } from 'react-native-paper';
+import { View } from 'react-native';
+import { Text, List, Switch } from 'react-native-paper';
 import React from 'react';
+import { useDesign } from '../../contexts/designContext';
 
 export default function Settings() {
   const [isDarkMode, setIsDarkMode] = React.useState(false);
   const [isNotificationsEnabled, setIsNotificationsEnabled] = React.useState(true);
+  const tokens = useDesign();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text variant="headlineMedium" style={styles.title}>Settings</Text>
+    <View style={{ flex: 1, backgroundColor: tokens.colors.background }}>
+      <View style={{ padding: tokens.spacing.lg, paddingTop: 60, backgroundColor: tokens.colors.surface }}>
+        <Text variant="headlineMedium" style={{ fontWeight: 'bold' }}>Settings</Text>
       </View>
 
-      <List.Section style={styles.list}>
+      <List.Section style={{ marginTop: tokens.spacing.sm, paddingBottom: 110 }}>
         <List.Subheader>Preferences</List.Subheader>
         <List.Item
           title="Dark Mode"
@@ -41,29 +43,11 @@ export default function Settings() {
         />
         <List.Item
           title="Logout"
-          titleStyle={{ color: MD3Colors.error50 }}
-          left={props => <List.Icon {...props} icon="logout" color={MD3Colors.error50} />}
+          titleStyle={{ color: tokens.colors.error }}
+          left={props => <List.Icon {...props} icon="logout" color={tokens.colors.error} />}
           onPress={() => {}}
         />
       </List.Section>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    padding: 20,
-    backgroundColor: 'white',
-  },
-  title: {
-    fontWeight: 'bold',
-  },
-  list: {
-    marginTop: 10,
-    paddingBottom: 110, // Space for FloatingNavBar
-  },
-});
