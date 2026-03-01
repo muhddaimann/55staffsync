@@ -35,11 +35,11 @@ export function NavBar() {
     ]).start();
   }, []);
 
-  const handleActionButton = () => {
+  const handleActionButton = async () => {
     if (isHome) {
       console.log("Plus pressed");
     } else {
-      signOut();
+      await signOut();
       router.replace("/goodbye");
     }
   };

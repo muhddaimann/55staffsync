@@ -10,10 +10,18 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
   const tokens = useDesign();
-  const { signIn } = useAuth();
+  const { signIn, user, isLoading } = useAuth();
 
-  const handleLogin = () => {
-    if (signIn(username, password)) {
+  // Auto-login check
+  React.useEffect(() => {
+    if (!isLoading && user) {
+      router.replace('/(tabs)/home');
+    }
+  }, [user, isLoading]);
+
+  const handleLogin = async () => {
+    const success = await signIn(username, password);
+    if (success) {
       setError(false);
       // Redirect to the intermediate welcome screen
       router.replace('/welcome');
@@ -21,6 +29,10 @@ export default function Login() {
       setError(true);
     }
   };
+
+  if (isLoading) {
+    return null; // Or a loading spinner from Paper
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: tokens.colors.background, justifyContent: 'center', padding: tokens.spacing.lg }}>

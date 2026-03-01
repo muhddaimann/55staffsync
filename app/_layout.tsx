@@ -4,6 +4,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
 import { DesignProvider } from '../contexts/designContext';
 import { AuthProvider } from '../contexts/authContext';
+import { TokenProvider } from '../contexts/tokenContext';
 import { PaperTheme } from '../constants/theme';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -36,21 +37,23 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <AuthProvider>
-        <DesignProvider>
-          <PaperProvider theme={PaperTheme}>
-            <StatusBar style="auto" />
-            <SafeAreaView style={styles.container} edges={['top']}>
-              <Stack screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="index" options={{ title: 'Login' }} />
-                <Stack.Screen name="welcome" options={{ title: 'Welcome' }} />
-                <Stack.Screen name="goodbye" options={{ title: 'Goodbye' }} />
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              </Stack>
-            </SafeAreaView>
-          </PaperProvider>
-        </DesignProvider>
-      </AuthProvider>
+      <TokenProvider>
+        <AuthProvider>
+          <DesignProvider>
+            <PaperProvider theme={PaperTheme}>
+              <StatusBar style="auto" />
+              <SafeAreaView style={styles.container} edges={['top']}>
+                <Stack screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="index" options={{ title: 'Login' }} />
+                  <Stack.Screen name="welcome" options={{ title: 'Welcome' }} />
+                  <Stack.Screen name="goodbye" options={{ title: 'Goodbye' }} />
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                </Stack>
+              </SafeAreaView>
+            </PaperProvider>
+          </DesignProvider>
+        </AuthProvider>
+      </TokenProvider>
     </SafeAreaProvider>
   );
 }
