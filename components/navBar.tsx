@@ -14,8 +14,8 @@ export function NavBar() {
   const pathname = usePathname();
   const { signOut } = useAuth();
   const { showLoader, hideLoader } = useLoader();
-  const isHome = pathname === "/home" || pathname === "/(tabs)/home";
-  const isSettings = pathname === "/settings" || pathname === "/(tabs)/settings";
+  const isHome = pathname.startsWith("/home") || pathname.startsWith("/(tabs)/home");
+  const isSettings = pathname.startsWith("/settings") || pathname.startsWith("/(tabs)/settings");
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(20)).current;
 
@@ -36,10 +36,7 @@ export function NavBar() {
 
   const handleActionButton = async () => {
     if (isHome) {
-      showLoader("Adding item...");
-      setTimeout(() => {
-        hideLoader();
-      }, 1000);
+      router.push("/(tabs)/home/main");
     } else {
       await signOut();
       router.replace("/goodbye");
