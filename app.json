@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "v1",
-    "slug": "v1",
+    "name": "Faith",
+    "slug": "faith",
     "version": "1.0.0",
-    "scheme": "v1-scheme",
+    "scheme": "faith-scheme",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

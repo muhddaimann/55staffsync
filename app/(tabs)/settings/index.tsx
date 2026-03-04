@@ -5,9 +5,9 @@ import {
   NativeScrollEvent,
 } from "react-native";
 import { useTheme } from "react-native-paper";
-import { useDesign } from "../../contexts/designContext";
-import { useTabs } from "../../contexts/tabContext";
-import ScrollTop from "../../components/scrollTop";
+import { useDesign } from "../../../contexts/designContext";
+import { useTabs } from "../../../contexts/tabContext";
+import ScrollTop from "../../../components/scrollTop";
 
 export default function Settings() {
   const theme = useTheme();
