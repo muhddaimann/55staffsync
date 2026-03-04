@@ -20,25 +20,25 @@ const make = (
 });
 
 const fontConfig = {
-  displayLarge: make("ComicNeue_700Bold", "700", 57, 64),
-  displayMedium: make("ComicNeue_700Bold", "700", 45, 52),
-  displaySmall: make("ComicNeue_700Bold", "700", 36, 44),
+  displayLarge: make("PlusJakartaSans_700Bold", "700", 57, 64),
+  displayMedium: make("PlusJakartaSans_700Bold", "700", 45, 52),
+  displaySmall: make("PlusJakartaSans_700Bold", "700", 36, 44),
 
-  headlineLarge: make("ComicNeue_700Bold", "700", 32, 40),
-  headlineMedium: make("ComicNeue_700Bold", "700", 28, 36),
-  headlineSmall: make("ComicNeue_700Bold", "700", 24, 32),
+  headlineLarge: make("PlusJakartaSans_700Bold", "700", 32, 40),
+  headlineMedium: make("PlusJakartaSans_700Bold", "700", 28, 36),
+  headlineSmall: make("PlusJakartaSans_700Bold", "700", 24, 32),
 
-  titleLarge: make("ComicNeue_700Bold", "700", 22, 28),
-  titleMedium: make("ComicNeue_700Bold", "700", 16, 24, 0.1),
-  titleSmall: make("ComicNeue_700Bold", "700", 14, 20, 0.1),
+  titleLarge: make("PlusJakartaSans_700Bold", "700", 22, 28),
+  titleMedium: make("PlusJakartaSans_500Medium", "700", 16, 24, 0.1),
+  titleSmall: make("PlusJakartaSans_500Medium", "700", 14, 20, 0.1),
 
-  labelLarge: make("ComicNeue_700Bold", "700", 14, 20, 0.1),
-  labelMedium: make("ComicNeue_400Regular", "400", 12, 16, 0.5),
-  labelSmall: make("ComicNeue_400Regular", "400", 11, 16, 0.5),
+  labelLarge: make("PlusJakartaSans_500Medium", "700", 14, 20, 0.1),
+  labelMedium: make("PlusJakartaSans_400Regular", "400", 12, 16, 0.5),
+  labelSmall: make("PlusJakartaSans_400Regular", "400", 11, 16, 0.5),
 
-  bodyLarge: make("ComicNeue_400Regular", "400", 16, 24),
-  bodyMedium: make("ComicNeue_400Regular", "400", 14, 20),
-  bodySmall: make("ComicNeue_400Regular", "400", 12, 16),
+  bodyLarge: make("PlusJakartaSans_400Regular", "400", 16, 24),
+  bodyMedium: make("PlusJakartaSans_400Regular", "400", 14, 20),
+  bodySmall: make("PlusJakartaSans_400Regular", "400", 12, 16),
 };
 
 const fonts = configureFonts({ config: fontConfig });

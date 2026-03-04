@@ -17,13 +17,13 @@ export default function TabLayout() {
           }}
         >
           <Tabs.Screen
-            name="home"
+            name="a"
             options={{
               title: 'Home',
             }}
           />
           <Tabs.Screen
-            name="settings"
+            name="b"
             options={{
               title: 'Settings',
             }}

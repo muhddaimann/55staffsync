@@ -12,7 +12,7 @@ export default function Welcome() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/(tabs)/home");
+      router.replace("/(tabs)/a");
     }, 1000);
     return () => clearTimeout(timer);
   }, []);

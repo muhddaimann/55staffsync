@@ -6,7 +6,9 @@ import { usePathname, router } from "expo-router";
 import { useDesign } from "../contexts/designContext";
 import { useAuth } from "../contexts/authContext";
 import { useTabs } from "../contexts/tabContext";
+import { useOverlay } from "../contexts/overlayContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import PickerModal from "../components/pickerModal";
 
 export function NavBar() {
   const theme = useTheme();
@@ -15,12 +17,12 @@ export function NavBar() {
   const pathname = usePathname();
   const { signOut } = useAuth();
   const { hideTabBar } = useTabs();
+  const { showModal, hideModal } = useOverlay();
 
-  const isHome =
-    pathname.startsWith("/home") || pathname.startsWith("/(tabs)/home");
+  const isHome = pathname.startsWith("/a") || pathname.startsWith("/(tabs)/a");
 
   const isSettings =
-    pathname.startsWith("/settings") || pathname.startsWith("/(tabs)/settings");
+    pathname.startsWith("/b") || pathname.startsWith("/(tabs)/b");
 
   const translateY = useRef(new Animated.Value(0)).current;
 
@@ -35,7 +37,46 @@ export function NavBar() {
 
   const handleActionButton = async () => {
     if (isHome) {
-      router.push("/(tabs)/home/main");
+      showModal({
+        dismissable: true,
+        content: (
+          <PickerModal
+            onClose={hideModal}
+            items={[
+              {
+                label: "Check In",
+                icon: "login-variant",
+                onPress: () => router.push("/a/main"),
+              },
+              {
+                label: "Check Out",
+                icon: "logout-variant",
+                onPress: () => router.push("/a/newsflash"),
+              },
+              {
+                label: "View Attendance",
+                icon: "calendar-check-outline",
+                onPress: () => router.push("/a/room"),
+              },
+              {
+                label: "Request Adjustment",
+                icon: "clipboard-edit-outline",
+                onPress: () => router.push("/a/main"),
+              },
+              {
+                label: "Book Room",
+                icon: "calendar-clock-outline",
+                onPress: () => router.push("a/newsflash"),
+              },
+              {
+                label: "Apply Leave",
+                icon: "file-document-edit-outline",
+                onPress: () => router.push("a/room"),
+              },
+            ]}
+          />
+        ),
+      });
     } else {
       await signOut();
       router.replace("/goodbye");
@@ -53,14 +94,14 @@ export function NavBar() {
       label: "Home",
       icon: "home-variant",
       active: isHome,
-      onPress: () => navigateTo("/home"),
+      onPress: () => navigateTo("/a"),
     },
     {
       key: "settings",
       label: "Settings",
       icon: "cog-outline",
       active: isSettings,
-      onPress: () => navigateTo("/settings"),
+      onPress: () => navigateTo("/b"),
     },
   ];
 
