@@ -3,10 +3,12 @@ import { View, Pressable } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import useHome from "../../hooks/useHome";
 
 export default function Header() {
   const { colors } = useTheme();
   const tokens = useDesign();
+  const { greeting, displayName } = useHome("Adam");
 
   return (
     <View
@@ -24,12 +26,22 @@ export default function Header() {
           gap: 2,
         }}
       >
-        <Text variant="titleMedium" style={{ color: colors.primary }}>
-          F A I T H
-        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Text variant="titleMedium" style={{ color: colors.primary }}>
+            Staff
+          </Text>
+          <Text variant="titleMedium" style={{ color: colors.secondary }}>
+            Sync
+          </Text>
+        </View>
 
         <Text variant="titleMedium" style={{ fontWeight: "600" }}>
-          Good Morning, Adam
+          {greeting}, {displayName}
         </Text>
 
         <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant }}>
