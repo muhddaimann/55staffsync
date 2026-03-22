@@ -18,7 +18,6 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-
   const theme = useTheme();
   const tokens = useDesign();
   const { signIn, user, isLoading } = useAuth();
@@ -145,8 +144,7 @@ export default function Login() {
           mode="contained"
           onPress={handleLogin}
           style={{
-            borderRadius: tokens.radii.lg,
-            paddingVertical: 4,
+            borderRadius: tokens.radii.pill,
           }}
           contentStyle={{ paddingVertical: 6 }}
           disabled={!username || !password}

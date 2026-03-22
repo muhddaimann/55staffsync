@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
-import { Text, useTheme, ActivityIndicator } from "react-native-paper";
+import React, { useEffect, useRef } from "react";
+import { View, Animated, StyleSheet } from "react-native";
+import { Text, useTheme, ActivityIndicator, Icon } from "react-native-paper";
 import { router } from "expo-router";
 import { useDesign } from "../contexts/designContext";
 
@@ -8,10 +8,34 @@ export default function Goodbye() {
   const theme = useTheme();
   const tokens = useDesign();
 
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(20)).current;
+  const scaleAnim = useRef(new Animated.Value(0.9)).current;
+
   useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        tension: 50,
+        friction: 7,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        tension: 50,
+        friction: 7,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
     const timer = setTimeout(() => {
       router.replace("/");
-    }, 1000);
+    }, 2500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -23,27 +47,111 @@ export default function Goodbye() {
         justifyContent: "center",
         alignItems: "center",
         paddingHorizontal: tokens.spacing.xl,
-        gap: tokens.spacing.lg,
       }}
     >
-      <Text
-        variant="headlineMedium"
-        style={{ fontWeight: "700", textAlign: "center" }}
-      >
-        Goodbye
-      </Text>
+      <View
+        style={[
+          styles.backgroundDecorator,
+          {
+            backgroundColor: theme.colors.errorContainer,
+            opacity: 0.1,
+          },
+        ]}
+      />
 
-      <Text
-        variant="bodyMedium"
+      <Animated.View
         style={{
-          textAlign: "center",
-          color: theme.colors.onSurfaceVariant,
+          opacity: fadeAnim,
+          transform: [{ translateY: slideAnim }, { scale: scaleAnim }],
+          alignItems: "center",
+          gap: tokens.spacing.lg,
         }}
       >
-        You have successfully logged out.
-      </Text>
+        <View
+          style={[
+            styles.iconContainer,
+            { backgroundColor: theme.colors.errorContainer },
+          ]}
+        >
+          <Icon source="logout-variant" size={48} color={theme.colors.error} />
+        </View>
 
-      <ActivityIndicator size="small" color={theme.colors.primary} />
+        <View style={{ alignItems: "center" }}>
+          <Text
+            variant="headlineMedium"
+            style={{
+              fontWeight: "700",
+              textAlign: "center",
+              color: theme.colors.onSurface,
+            }}
+          >
+            Signed Out
+          </Text>
+          <Text
+            variant="titleMedium"
+            style={{
+              textAlign: "center",
+              color: theme.colors.error,
+              fontWeight: "600",
+              marginTop: 4,
+            }}
+          >
+            StaffSync
+          </Text>
+        </View>
+
+        <View style={{ maxWidth: 280 }}>
+          <Text
+            variant="bodyMedium"
+            style={{
+              textAlign: "center",
+              color: theme.colors.onSurfaceVariant,
+              lineHeight: 22,
+            }}
+          >
+            Your session has ended. Come back anytime to continue managing your
+            work seamlessly.
+          </Text>
+        </View>
+
+        <View
+          style={{
+            marginTop: tokens.spacing.xl,
+            alignItems: "center",
+            gap: tokens.spacing.md,
+          }}
+        >
+          <ActivityIndicator size="small" color={theme.colors.error} />
+          <Text
+            variant="labelLarge"
+            style={{
+              color: theme.colors.outline,
+              letterSpacing: 1,
+            }}
+          >
+            RETURNING TO LOGIN
+          </Text>
+        </View>
+      </Animated.View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  backgroundDecorator: {
+    position: "absolute",
+    width: 600,
+    height: 600,
+    borderRadius: 300,
+    top: -200,
+    right: -150,
+  },
+  iconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+});

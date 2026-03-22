@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useToken } from "./tokenContext";
 import { useOverlay } from "./overlayContext";
+import { router } from "expo-router";
 
 type AuthContextType = {
   user: string | null;
@@ -69,6 +70,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           await deleteToken();
           setUser(null);
           toast({ message: "Signed out", variant: "success" });
+          router.replace("/goodbye");
         } catch (e) {
           console.error("Failed to delete session", e);
           toast({ message: "Failed to sign out", variant: "error" });

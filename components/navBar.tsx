@@ -35,7 +35,7 @@ export function NavBar() {
     }).start();
   }, [hideTabBar]);
 
-  const handleActionButton = async () => {
+  const handleActionButton = () => {
     if (isHome) {
       showModal({
         dismissable: true,
@@ -78,8 +78,7 @@ export function NavBar() {
         ),
       });
     } else {
-      await signOut();
-      router.replace("/goodbye");
+      signOut();
     }
   };
 
