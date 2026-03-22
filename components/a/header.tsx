@@ -3,12 +3,13 @@ import { View, Pressable } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import useHome from "../../hooks/useHome";
 
 export default function Header() {
   const { colors } = useTheme();
   const tokens = useDesign();
-  const { greeting, displayName } = useHome("Adam");
+  const { greeting, displayName } = useHome("Maimano");
 
   return (
     <View
@@ -20,12 +21,7 @@ export default function Header() {
         justifyContent: "space-between",
       }}
     >
-      <View
-        style={{
-          flex: 1,
-          gap: 2,
-        }}
-      >
+      <View style={{ flex: 1, gap: 2 }}>
         <View
           style={{
             flexDirection: "row",
@@ -57,6 +53,7 @@ export default function Header() {
         }}
       >
         <Pressable
+          onPress={() => router.push("/a/newsflash")}
           style={({ pressed }) => ({
             width: 40,
             height: 40,
@@ -74,15 +71,22 @@ export default function Header() {
           />
         </Pressable>
 
-        <View
-          style={{
+        <Pressable
+          onPress={() => {
+            router.push("/b");
+            setTimeout(() => {
+              router.push("/b/update");
+            }, 200);
+          }}
+          style={({ pressed }) => ({
             width: 48,
             height: 48,
             borderRadius: tokens.radii.full,
             backgroundColor: colors.primary,
             alignItems: "center",
             justifyContent: "center",
-          }}
+            transform: [{ scale: pressed ? 0.95 : 1 }],
+          })}
         >
           <Text
             variant="titleMedium"
@@ -91,9 +95,9 @@ export default function Header() {
               fontWeight: "700",
             }}
           >
-            AF
+            MA
           </Text>
-        </View>
+        </Pressable>
       </View>
     </View>
   );

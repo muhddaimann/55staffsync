@@ -36,19 +36,19 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <TokenProvider>
-        <AuthProvider>
-          <DesignProvider>
-            <ThemeProvider>
+        <DesignProvider>
+          <ThemeProvider>
+            <OverlayProvider>
               <LoaderProvider>
-                <OverlayProvider>
+                <AuthProvider>
                   <View style={{ flex: 1 }}>
                     <Stack screenOptions={{ headerShown: false }} />
                   </View>
-                </OverlayProvider>
+                </AuthProvider>
               </LoaderProvider>
-            </ThemeProvider>
-          </DesignProvider>
-        </AuthProvider>
+            </OverlayProvider>
+          </ThemeProvider>
+        </DesignProvider>
       </TokenProvider>
     </SafeAreaProvider>
   );
